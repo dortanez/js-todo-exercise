@@ -1,9 +1,11 @@
 const todoInput = document.querySelector('input[type="text"]');
 const todoForm = document.querySelector('#todoForm');
 const todoList = document.querySelector('#todoList');
+const lis = document.querySelectorAll('li');
 
-todoListStorage = [];
+const todoListStorage = [];
 
+// adding new task to page and to storage array
 todoForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const newItem = document.createElement('li');
@@ -17,28 +19,31 @@ todoForm.addEventListener('submit', function(e) {
     localStorage.setItem('tasks',JSON.stringify(todoListStorage))
 })
 
-const tasks = JSON.parse(localStorage.getItem('tasks'))
-for(let task of tasks) {
-    todoListStorage.push(task)
-    var newLi = document.createElement('li');
-    newLi.innerHTML = task;
-    todoList.appendChild(newLi);
-}
 
+// deleting task from page and from storage array
 todoList.addEventListener('click', function(e) {
     if(e.target.tagName === 'BUTTON') {
         e.target.parentElement.remove();
-        for(let t of todoListStorage) {
-            if(todoListStorage.indexOf(e.target.parentElement.innerHTML) !== -1) {
-                todoListStorage.splice(todoListStorage.indexOf(e.target.parentElement.innerHTML),1)
-            }
-        }
-    }
-    
+        console.log(todoListStorage.indexOf(e.target.parentElement.innerHTML))
+        console.log(e.target.parentElement.innerHTML)
+        console.log(todoListStorage)
+        todoListStorage.splice(todoListStorage.indexOf(e.target.parentElement.innerHTML),1)
+        localStorage.setItem('tasks',JSON.stringify(todoListStorage))       
+    } 
     if(e.target.tagName === 'LI') {
         e.target.classList.toggle('strike');
     }
 })
 
-console.log(todoListStorage)
-console.log(localStorage.getItem('tasks'))
+// getting tasks from local storage and adding it to new page
+const tasks = JSON.parse(localStorage.getItem('tasks'))
+
+for(let task of tasks) {
+    const newLi = document.createElement('li');
+    newLi.innerHTML = task;
+    todoList.appendChild(newLi);
+    todoListStorage.push(newLi.innerHTML)
+}
+
+
+
