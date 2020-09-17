@@ -13,29 +13,29 @@ todoForm.addEventListener('submit', function(e) {
     newItem.innerText = todoInput.value + ' ';
     newItem.appendChild(deleteBtn);
     todoList.appendChild(newItem);
-    todoInput.value = '';
     todoListStorage.push(newItem.innerHTML);
     localStorage.setItem('tasks',JSON.stringify(todoListStorage))
+    todoForm.reset();
 })
 
 // deleting task from page and from storage array
 todoList.addEventListener('click', function(e) {
     if(e.target.tagName === 'BUTTON') {
         e.target.parentElement.remove();
-        todoListStorage.splice(todoListStorage.indexOf(e.target.parentElement.innerHTML),1)
-        localStorage.setItem('tasks',JSON.stringify(todoListStorage))       
+        const indexx = todoListStorage.findIndex((val) => {
+            return val === e.target.parentElement.innerHTML;
+        })
+        todoListStorage.splice(indexx,1)
     } 
     // completing task when clicked
     if(e.target.tagName === 'LI') {
         let old = e.target.innerHTML;
         e.target.classList.toggle('strike');
         e.target.children[0].classList.toggle('completed')
-        if(e.target.children[0].classList == 'completed') {
-            todoListStorage[todoListStorage.indexOf(old)] = e.target.innerHTML;
-        } else {
+        todoListStorage[todoListStorage.indexOf(old)] = e.target.innerHTML;
+        if(e.target.children[0].classList != 'completed') {
             e.target.children[0].classList == '';
-            todoListStorage[todoListStorage.indexOf(old)] = e.target.innerHTML;
-        }   
+        } 
     } 
     localStorage.setItem('tasks',JSON.stringify(todoListStorage))    
 })
